@@ -1,23 +1,29 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import Chats from './Screens/Chats';
 import States from './Screens/States';
 import { NavigationContainer } from '@react-navigation/native';
 import { Animated, TouchableOpacity } from 'react-native';
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import Login from './Screens/Login';
+import { FirebaseApp } from 'firebase/app';
+import FirebaseContext from './Contexts/FirebaseContext';
+
+
 
 const Tab = createMaterialTopTabNavigator();
 
 
 
-function MyTabBar({ state, descriptors, navigation, position }) {
+function MyTabBar({ state, descriptors, navigation, position }: any) {
   return (
 
     <View style={{flexDirection: 'column'}}>
         <Text>I am a searching top bar</Text>
     <View style={{ flexDirection: 'row', paddingTop: 25 }}>
         
-      {state.routes.map((route, index) => {
+      {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
@@ -59,6 +65,7 @@ function MyTabBar({ state, descriptors, navigation, position }) {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
+            key={index}
             style={{ flex: 2 }}
           >
             <Animated.Text style={{
@@ -77,6 +84,23 @@ function MyTabBar({ state, descriptors, navigation, position }) {
   );
 }
 export default function Navigation() {
+    const [user, setUser] = useState<User | null>(null);
+    const app: FirebaseApp | null = useContext(FirebaseContext);
+
+    useEffect(() => {
+      const auth = getAuth(app || undefined);
+      const unsubcrbe = onAuthStateChanged(auth, (user)=> {
+        if(user){
+          setUser(user);
+        }
+      })
+      return unsubcrbe;
+
+    }, [])
+
+    if(!user){
+      return <Login />
+    }
     return (
         <NavigationContainer>
             <Tab.Navigator
