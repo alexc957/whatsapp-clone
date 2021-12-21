@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import Chats from './Screens/Chats';
+
 import States from './Screens/States';
 import { NavigationContainer } from '@react-navigation/native';
 import { Animated, TouchableOpacity } from 'react-native';
@@ -9,7 +9,10 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import Login from './Screens/Login';
 import { FirebaseApp } from 'firebase/app';
 import FirebaseContext from './Contexts/FirebaseContext';
+import Chats from './Screens/ChatsScree/Chats';
 
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import IndivualChat from './Screens/IndividualChat/IndivualChat';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -83,6 +86,18 @@ function MyTabBar({ state, descriptors, navigation, position }: any) {
     </View>
   );
 }
+
+
+const Stack = createNativeStackNavigator();
+
+function ChatNavigator()  {
+
+  return <Stack.Navigator>
+      <Stack.Screen name='Chats' component={Chats} />
+      <Stack.Screen name='Chat' component={IndivualChat} />
+  </Stack.Navigator>
+  
+}
 export default function Navigation() {
     const [user, setUser] = useState<User | null>(null);
     const app: FirebaseApp | null = useContext(FirebaseContext);
@@ -109,7 +124,7 @@ export default function Navigation() {
                     marginTop: 25 
                 }}
             >
-                <Tab.Screen  name={"Chats"} component={Chats} />
+                <Tab.Screen  name={"Contactos"} component={ChatNavigator} />
                 <Tab.Screen  name="Estados" component={States}  />   
             </Tab.Navigator>
         </NavigationContainer>
