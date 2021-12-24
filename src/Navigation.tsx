@@ -13,6 +13,8 @@ import Chats from './Screens/ChatsScree/Chats';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import IndivualChat from './Screens/IndividualChat/IndivualChat';
+import AuthNavigation from './AuthNavigation';
+import Profile from './Screens/Profile';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -93,7 +95,9 @@ const Stack = createNativeStackNavigator();
 function ChatNavigator()  {
 
   return <Stack.Navigator>
-      <Stack.Screen name='Chats' component={Chats} />
+      <Stack.Screen name='Chats' component={Chats} options={{
+        headerShown: false
+      }} />
       <Stack.Screen name='Chat' component={IndivualChat} />
   </Stack.Navigator>
   
@@ -114,7 +118,7 @@ export default function Navigation() {
     }, [])
 
     if(!user){
-      return <Login />
+      return <AuthNavigation />
     }
     return (
         <NavigationContainer>
@@ -126,6 +130,7 @@ export default function Navigation() {
             >
                 <Tab.Screen  name={"Contactos"} component={ChatNavigator} />
                 <Tab.Screen  name="Estados" component={States}  />   
+                <Tab.Screen  name="Perfil" component={Profile}  />   
             </Tab.Navigator>
         </NavigationContainer>
     )

@@ -1,13 +1,13 @@
 import { FirebaseApp } from 'firebase/app';
 import React, { useContext, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { Button, Card, Input } from 'react-native-elements';
 import FirebaseContext from '../Contexts/FirebaseContext';
 import Toast from 'react-native-toast-message';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
-export default function Login() {
+export default function Login({ navigation }: any) {
     const [email, setEmail] = useState<string>("");
     const [password, setPasword] = useState<string>("");
     const app: FirebaseApp | null = useContext(FirebaseContext);
@@ -45,6 +45,12 @@ export default function Login() {
                     secureTextEntry={true}/>
 
                 <Button title={"Log In"}  onPress={onLogin} />
+
+                <View>
+                    <TouchableOpacity onPress={() => navigation.navigate("Sign Up")}> 
+                        <Text>No tienes cuenta, crea una aqui?</Text>
+                    </TouchableOpacity>
+                </View>
 
 
             </Card>
